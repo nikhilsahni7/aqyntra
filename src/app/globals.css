@@ -1,26 +1,99 @@
 @import "tailwindcss";
 
+@theme {
+  /* Living Material palette */
+  --color-deep: #0A1F14;
+  --color-forest: #14432A;
+  --color-lichen: #4A7C5C;
+  --color-spring: #5DBA72;
+  --color-dew: #B8E6C4;
+  --color-mist: #EFF6F0;
+  --color-cloud: #F8FAF8;
+  --color-petal: #FFFFFF;
+
+  /* Legacy compat aliases (used by existing tailwind classes) */
+  --color-primary: #0A1F14;
+  --color-primary-light: #14432A;
+  --color-accent: #5DBA72;
+  --color-accent-light: #7ED695;
+  --color-cream: #F8FAF8;
+  --color-clay: #E8EDE9;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F8FAF8;
+  --foreground: #0A1F14;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  font-size: 17px;
+  line-height: 1.7;
+}
+
+/* Refined scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c1d4c6;
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #5DBA72;
+}
+
+/* Glass effects */
+.glass {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.glass-dark {
+  background: rgba(10, 31, 20, 0.88);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus ring for keyboard nav */
+:focus-visible {
+  outline: 2px solid #5DBA72;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Selection color */
+::selection {
+  background: #B8E6C4;
+  color: #0A1F14;
 }
