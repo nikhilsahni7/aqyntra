@@ -1,87 +1,238 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Menu, X, ArrowRight } from "lucide-react";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      setScrolled(window.scrollY > 40);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    const sections = ["home", "about", "products", "sustainability", "export", "contact"];
+    const observers: IntersectionObserver[] = [];
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActiveSection(id); },
+        { threshold: 0.35 }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+    return () => observers.forEach((o) => o.disconnect());
+  }, []);
+
   const navItems = [
-    { name: "Home", href: "#home" },
-    { name: "About", href: "#about" },
-    { name: "Products", href: "#products" },
-    { name: "Sustainability", href: "#sustainability" },
-    { name: "Export", href: "#export" },
-    { name: "Contact", href: "#contact" },
+    { name: "Home", href: "#home", id: "home" },
+    { name: "About", href: "#about", id: "about" },
+    { name: "Products", href: "#products", id: "products" },
+    { name: "Sustainability", href: "#sustainability", id: "sustainability" },
+    { name: "Export", href: "#export", id: "export" },
+    { name: "Contact", href: "#contact", id: "contact" },
   ];
 
   return (
-    <header
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled
-          ? "bg-petal/95 backdrop-blur-xl shadow-[0_1px_0_rgba(0,0,0,0.04)] py-3"
-          : "bg-transparent py-5 [text-shadow:0_1px_3px_rgba(0,0,0,0.4)]"
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 flex items-center justify-between">
-        {/* Brand */}
-        <a href="#home" className="flex items-center gap-2.5 group">
-          <svg
-            className={`w-9 h-9 transition-colors duration-500 ${scrolled ? "text-deep" : "text-petal"}`}
-            viewBox="0 0 100 120"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <rect x="42" y="8" width="16" height="8" rx="1.5" fill="currentColor" />
-            <path
-              d="M44 16 H56 V30 L66 52 V100 C66 104.4 62.4 108 58 108 H42 C37.6 108 34 104.4 34 100 V52 L44 30 Z"
-              stroke="currentColor"
-              strokeWidth="4.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path
-              d="M50 40 L62 90 H54 L50 72 H40 M50 40 L38 90 H46 L50 72"
-              stroke="currentColor"
-              strokeWidth="4"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-            <path d="M32 78 C32 66 38 62 44 62 C38 70 42 78 32 78 Z" fill="#5DBA72" />
-            <path
-              d="M50 78 C52 78 54 80 54 82 C54 84 50 87 50 87 C50 87 46 84 46 82 C46 80 48 78 50 78 Z"
-              fill="#38bdf8"
-            />
-          </svg>
-          <div className="flex flex-col">
-            <span className={`font-display font-bold text-xl tracking-[0.08em] leading-none transition-colors duration-500 ${scrolled ? "text-deep" : "text-white"}`}>
-              AQYNTRA
-            </span>
-            <span className={`text-[8px] tracking-[0.2em] font-medium leading-none mt-0.5 uppercase transition-colors duration-500 ${scrolled ? "text-lichen" : "text-white/70"}`}>
-              Pure Nature · Pure Future
-            </span>
-          </div>
-        </a>
+    <>
+      <style>{`
+        @keyframes logo-in {
+          from { opacity: 0; transform: translateX(-14px); }
+          to   { opacity: 1; transform: translateX(0); }
+        }
+        .logo-animate { animation: logo-in 0.7s cubic-bezier(0.22,1,0.36,1) both; }
 
-        {/* Desktop Nav */}
-        <nav className="hidden lg:flex items-center gap-1">
+        .nav-link-active::after {
+          content: '';
+          position: absolute;
+          bottom: 4px; left: 12px; right: 12px;
+          height: 2px; border-radius: 2px;
+          background: currentColor;
+          transform-origin: center;
+        }
+        .nav-link-hover {
+          position: relative;
+        }
+        .nav-link-hover::after {
+          content: '';
+          position: absolute;
+          bottom: 4px; left: 12px; right: 12px;
+          height: 2px; border-radius: 2px;
+          background: currentColor;
+          transform: scaleX(0);
+          transform-origin: center;
+          transition: transform 0.25s ease;
+          opacity: 0.5;
+        }
+        .nav-link-hover:hover::after { transform: scaleX(1); }
+
+        /* Logo wrapper — background adapts so the green logo is always crisp */
+        .logo-wrap-hero {
+          background: rgba(255,255,255,0.95);
+          border-radius: 10px;
+          padding: 4px;
+          box-shadow: 0 4px 20px rgba(0,0,0,0.25), 0 0 0 1px rgba(255,255,255,0.3);
+          backdrop-filter: blur(4px);
+        }
+        .logo-wrap-scrolled {
+          background: transparent;
+          border-radius: 10px;
+          padding: 0;
+          box-shadow: none;
+        }
+        @keyframes glow-pulse {
+          0%,100% { box-shadow: 0 4px 20px rgba(93,186,114,0.3); }
+          50%      { box-shadow: 0 4px 32px rgba(93,186,114,0.55); }
+        }
+        .cta-glow:hover { animation: glow-pulse 1.4s ease-in-out infinite; }
+      `}</style>
+
+      <header
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+          scrolled ? "py-2" : "py-4 [text-shadow:0_1px_4px_rgba(0,0,0,0.5)]"
+        }`}
+      >
+        <div className={`mx-auto transition-all duration-500 ${scrolled ? "max-w-6xl px-4" : "max-w-7xl px-6 lg:px-8"}`}>
+          <div
+            className={`flex items-center justify-between transition-all duration-500 ${
+              scrolled
+                ? "bg-white/92 backdrop-blur-2xl border border-white/70 shadow-[0_8px_40px_rgba(10,31,20,0.12)] rounded-2xl px-5 py-2.5"
+                : ""
+            }`}
+          >
+            {/* ── Brand ── */}
+            <a href="#home" className="flex items-center gap-3 group logo-animate flex-shrink-0" aria-label="AQYNTRA Home">
+              {/* Logo icon — white-backed container so the green mark is crisp on any bg */}
+              <div
+                className={`relative flex-shrink-0 transition-all duration-300 ${
+                  scrolled
+                    ? "w-12 h-12 rounded-xl bg-transparent"
+                    : "w-14 h-14 rounded-xl bg-white/95 shadow-[0_4px_16px_rgba(0,0,0,0.3)] ring-1 ring-white/30"
+                }`}
+              >
+                <Image
+                  src="/logo-bg-removed.png"
+                  alt="AQYNTRA logo mark"
+                  fill
+                  className="object-contain p-1"
+                  sizes="56px"
+                  priority
+                />
+              </div>
+
+              <div className="flex flex-col leading-none">
+                <span
+                  className={`font-display font-bold tracking-[0.1em] leading-none transition-all duration-500 ${
+                    scrolled ? "text-[#0A1F14] text-[17px]" : "text-white text-[18px]"
+                  }`}
+                >
+                  AQYNTRA
+                </span>
+                <span
+                  className={`text-[7px] tracking-[0.26em] font-semibold leading-none mt-1 uppercase transition-all duration-500 ${
+                    scrolled ? "text-[#4A7C5C]" : "text-white/55"
+                  }`}
+                >
+                  Pure Nature · Pure Future
+                </span>
+              </div>
+            </a>
+
+            {/* ── Desktop Nav ── */}
+            <nav className="hidden lg:flex items-center gap-0.5" aria-label="Main navigation">
+              {navItems.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className={`nav-link-hover relative font-sans font-semibold text-[13.5px] px-3.5 py-2 rounded-xl transition-all duration-300 ${
+                    activeSection === item.id
+                      ? `nav-link-active ${scrolled ? "text-[#14432A]" : "text-white"}`
+                      : scrolled
+                      ? "text-[#0A1F14]/55 hover:text-[#0A1F14]"
+                      : "text-white/75 hover:text-white"
+                  } ${scrolled ? "hover:bg-[#0A1F14]/[0.04]" : "hover:bg-white/[0.08]"}`}
+                >
+                  {item.name}
+                </a>
+              ))}
+            </nav>
+
+            {/* ── CTA ── */}
+            <div className="hidden lg:flex items-center">
+              <a
+                href="#contact"
+                className={`cta-glow flex items-center gap-2 font-semibold text-[13.5px] px-5 py-2.5 rounded-full transition-all duration-300 group ${
+                  scrolled
+                    ? "bg-gradient-to-r from-[#14432A] to-[#0A1F14] text-white hover:from-[#1a5436] hover:to-[#14432A] shadow-lg shadow-[#0A1F14]/20"
+                    : "bg-white text-[#0A1F14] hover:bg-white/95 shadow-xl shadow-black/20"
+                }`}
+              >
+                Get In Touch
+                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
+              </a>
+            </div>
+
+            {/* ── Mobile Trigger ── */}
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className={`lg:hidden p-2 rounded-xl focus:outline-none transition-all duration-300 ${
+                scrolled ? "text-[#0A1F14] hover:bg-[#0A1F14]/[0.05]" : "text-white hover:bg-white/10"
+              }`}
+              aria-label="Toggle menu"
+            >
+              {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* ── Mobile Drawer ── */}
+      <div
+        className={`fixed inset-y-0 right-0 z-40 w-full max-w-sm bg-white shadow-2xl flex flex-col lg:hidden transition-transform duration-400 ease-[cubic-bezier(0.32,0.72,0,1)] ${
+          isOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
+        {/* Drawer Header */}
+        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+          {/* Full logo as single brand mark — no separate text to avoid duplication */}
+          <div className="relative w-[120px] h-[48px]">
+            <Image
+              src="/logo-bg-removed.png"
+              alt="AQYNTRA"
+              fill
+              className="object-contain object-left"
+              sizes="120px"
+            />
+          </div>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="text-[#0A1F14] p-2 rounded-xl hover:bg-gray-100 focus:outline-none transition-colors flex-shrink-0"
+            aria-label="Close menu"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Nav Items */}
+        <nav className="flex flex-col gap-1 px-4 pt-6 flex-1 overflow-y-auto">
           {navItems.map((item) => (
             <a
               key={item.name}
               href={item.href}
-              className={`font-sans font-semibold text-[14px] px-3.5 py-2 rounded-lg transition-all duration-300 ${
-                scrolled
-                  ? "text-deep/70 hover:text-deep hover:bg-deep/[0.03]"
-                  : "text-white hover:text-white hover:bg-white/[0.1]"
+              onClick={() => setIsOpen(false)}
+              className={`font-sans font-medium text-base py-3.5 px-4 rounded-xl transition-all duration-200 ${
+                activeSection === item.id
+                  ? "bg-[#EFF6F0] text-[#14432A] font-semibold"
+                  : "text-[#0A1F14]/65 hover:text-[#0A1F14] hover:bg-gray-50"
               }`}
             >
               {item.name}
@@ -90,71 +241,18 @@ export default function Header() {
         </nav>
 
         {/* CTA */}
-        <div className="hidden lg:flex items-center">
-          <a
-            href="#contact"
-            className={`flex items-center gap-2 font-semibold text-[14px] px-5 py-2.5 rounded-full transition-all duration-300 hover:shadow-lg group ${
-              scrolled
-                ? "bg-deep hover:bg-forest text-petal"
-                : "bg-white text-deep hover:bg-white/90"
-            }`}
-          >
-            Get In Touch
-            <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
-          </a>
-        </div>
-
-        {/* Mobile menu trigger */}
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className={`lg:hidden p-2 focus:outline-none transition-colors duration-500 ${scrolled ? "text-deep" : "text-petal"}`}
-          aria-label="Toggle menu"
-        >
-          {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
-      </div>
-
-      {/* Mobile Drawer */}
-      <div
-        className={`fixed inset-y-0 right-0 z-40 w-full max-w-sm bg-petal shadow-2xl p-8 flex flex-col lg:hidden transition-transform duration-300 ease-in-out ${
-          isOpen ? "translate-x-0" : "translate-x-full"
-        }`}
-      >
-        <div className="flex items-center justify-between mb-10">
-          <span className="font-display font-bold text-lg tracking-wider text-deep">
-            AQYNTRA
-          </span>
-          <button
-            onClick={() => setIsOpen(false)}
-            className="text-deep p-2 focus:outline-none"
-            aria-label="Close menu"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-
-        <nav className="flex flex-col gap-1 my-auto">
-          {navItems.map((item) => (
-            <a
-              key={item.name}
-              href={item.href}
-              onClick={() => setIsOpen(false)}
-              className="font-sans font-medium text-base text-deep hover:text-spring transition-colors py-3 px-3 rounded-lg hover:bg-mist"
-            >
-              {item.name}
-            </a>
-          ))}
-        </nav>
-
-        <div className="mt-auto">
+        <div className="px-6 py-6 border-t border-gray-100">
           <a
             href="#contact"
             onClick={() => setIsOpen(false)}
-            className="flex items-center justify-center gap-2 bg-deep text-petal font-medium py-3.5 rounded-full w-full transition-colors hover:bg-forest"
+            className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#14432A] to-[#0A1F14] text-white font-semibold py-4 rounded-2xl w-full transition-all hover:opacity-90 shadow-lg text-[15px]"
           >
             Get In Touch
             <ArrowRight className="w-4 h-4" />
           </a>
+          <p className="text-center text-[9px] text-[#4A7C5C] tracking-[0.22em] uppercase font-semibold mt-3">
+            Pure Nature · Pure Future
+          </p>
         </div>
       </div>
 
@@ -162,9 +260,9 @@ export default function Header() {
       {isOpen && (
         <div
           onClick={() => setIsOpen(false)}
-          className="fixed inset-0 z-30 bg-deep/20 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-30 bg-[#0A1F14]/25 backdrop-blur-sm lg:hidden"
         />
       )}
-    </header>
+    </>
   );
 }

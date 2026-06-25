@@ -1,16 +1,19 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
+import { AnimatePresence, motion, Variants } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import { useState } from "react";
+import { FadeUp, StaggerContainer } from "./AnimationUtils";
+
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const products = [
   {
     id: "sizes",
     title: "Eco Bottle Sizes",
     subtitle: "250ml · 500ml · 750ml · 1000ml",
-    image: "/product_bottles.png",
+    image: "/bottles.jpeg",
     desc: "Our premium biodegradable bottles come in standard sizes designed for retail, hospitality, fitness, and travel. Ergonomic grip, glass-like clarity, and fully compatible with existing bottling lines.",
     specs: [
       "Sizes: 250ml, 500ml, 750ml, 1000ml",
@@ -36,7 +39,7 @@ const products = [
     id: "private",
     title: "Private Label",
     subtitle: "Custom Brand Solutions",
-    image: "/hero_bottle.png",
+    image: "/bottles.jpeg",
     desc: "Customize packaging with your own logos, labels, and caps. We manufacture sustainable packaged drinking water for luxury hotels, premium airlines, corporate offices, and eco-brands.",
     specs: [
       "Custom high-resolution label printing",
@@ -47,14 +50,26 @@ const products = [
   },
 ];
 
+const specVariants: Variants = {
+  hidden: { opacity: 0, x: -12 },
+  show: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.4, ease: EASE },
+  },
+};
+
 export default function Products() {
   const [selectedProduct, setSelectedProduct] = useState(products[0]);
 
   return (
     <section id="products" className="py-24 lg:py-32 bg-petal relative overflow-hidden">
+      {/* Ambient glow */}
+      <div className="absolute left-1/2 -translate-x-1/2 top-0 w-[800px] h-[400px] bg-spring/[0.04] rounded-full blur-[120px] pointer-events-none" />
+
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-14">
+        <FadeUp className="text-center max-w-2xl mx-auto mb-14">
           <span className="text-spring font-semibold text-[11px] uppercase tracking-[0.15em] mb-4 block">
             Our Products
           </span>
@@ -65,78 +80,117 @@ export default function Products() {
             Finished bottled water, preforms for local manufacturing, and
             bespoke private label solutions.
           </p>
-        </div>
+        </FadeUp>
 
         {/* Product tabs */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12">
-          {products.map((prod) => (
-            <button
-              key={prod.id}
-              onClick={() => setSelectedProduct(prod)}
-              className={`px-5 py-2.5 rounded-full font-medium text-[13px] transition-all duration-200 cursor-pointer ${
-                selectedProduct.id === prod.id
-                  ? "bg-deep text-petal shadow-md"
-                  : "bg-mist text-lichen hover:text-deep hover:bg-cloud border border-deep/[0.04]"
-              }`}
-            >
-              {prod.title}
-            </button>
-          ))}
-        </div>
+        <FadeUp delay={0.1}>
+          <div className="flex flex-wrap justify-center gap-2 mb-12">
+            {products.map((prod) => (
+              <button
+                key={prod.id}
+                onClick={() => setSelectedProduct(prod)}
+                className={`px-5 py-2.5 rounded-full font-medium text-[13px] transition-all duration-300 cursor-pointer ${
+                  selectedProduct.id === prod.id
+                    ? "bg-deep text-petal shadow-md scale-[1.03]"
+                    : "bg-mist text-lichen hover:text-deep hover:bg-cloud border border-deep/[0.04] hover:scale-[1.02]"
+                }`}
+              >
+                {prod.title}
+              </button>
+            ))}
+          </div>
+        </FadeUp>
 
         {/* Product display */}
         <AnimatePresence mode="wait">
           <motion.div
             key={selectedProduct.id}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, y: 16, filter: "blur(3px)" }}
+            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            exit={{ opacity: 0, y: -16, filter: "blur(3px)" }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             className="bg-mist rounded-2xl border border-deep/[0.04] overflow-hidden"
           >
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
               {/* Image */}
-              <div className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[480px] bg-cloud">
-                <Image
-                  src={selectedProduct.image}
-                  alt={selectedProduct.title}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 1024px) 100vw, 50vw"
-                />
+              <div className="relative aspect-[4/3] lg:aspect-auto lg:min-h-[480px] bg-cloud overflow-hidden">
+                <motion.div
+                  className="absolute inset-0"
+                  initial={{ scale: 1.06 }}
+                  animate={{ scale: 1 }}
+                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <Image
+                    src={selectedProduct.image}
+                    alt={selectedProduct.title}
+                    fill
+                    className="object-contain p-4"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                </motion.div>
               </div>
 
               {/* Details */}
               <div className="p-8 lg:p-12 flex flex-col justify-center">
-                <span className="text-spring text-[11px] font-semibold uppercase tracking-[0.15em] mb-3">
+                <motion.span
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.1 }}
+                  className="text-spring text-[11px] font-semibold uppercase tracking-[0.15em] mb-3"
+                >
                   {selectedProduct.subtitle}
-                </span>
-                <h3 className="font-display font-bold text-2xl lg:text-3xl text-deep mb-4 tracking-tight">
+                </motion.span>
+                <motion.h3
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.15 }}
+                  className="font-display font-bold text-2xl lg:text-3xl text-deep mb-4 tracking-tight"
+                >
                   {selectedProduct.title}
-                </h3>
-                <p className="text-lichen text-[15px] leading-relaxed mb-8">
+                </motion.h3>
+                <motion.p
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.2 }}
+                  className="text-lichen text-[15px] leading-relaxed mb-8"
+                >
                   {selectedProduct.desc}
-                </p>
+                </motion.p>
 
                 <h4 className="font-display font-semibold text-[13px] text-deep uppercase tracking-wider mb-4">
                   Key Specifications
                 </h4>
-                <ul className="flex flex-col gap-3 mb-8">
+                <StaggerContainer
+                  delayChildren={0.25}
+                  staggerChildren={0.07}
+                  className="flex flex-col gap-3 mb-8"
+                  once={false}
+                >
                   {selectedProduct.specs.map((spec, index) => (
-                    <li key={index} className="flex gap-3 items-start text-[14px] text-lichen">
+                    <motion.li
+                      key={index}
+                      variants={specVariants}
+                      className="flex gap-3 items-start text-[14px] text-lichen list-none"
+                    >
                       <span className="w-1.5 h-1.5 rounded-full bg-spring mt-2 shrink-0" />
                       <span>{spec}</span>
-                    </li>
+                    </motion.li>
                   ))}
-                </ul>
+                </StaggerContainer>
 
-                <a
-                  href="#contact"
-                  className="inline-flex items-center gap-2 bg-deep hover:bg-forest text-petal font-medium text-[14px] px-6 py-3 rounded-full shadow transition-all hover:shadow-md group w-fit"
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.5 }}
                 >
-                  Inquire About Product
-                  <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-                </a>
+                  <a
+                    href="#contact"
+                    className="inline-flex items-center gap-2 bg-deep hover:bg-forest text-petal font-medium text-[14px] px-6 py-3 rounded-full shadow transition-all hover:shadow-md hover:-translate-y-0.5 group w-fit"
+                  >
+                    Inquire About Product
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+                  </a>
+                </motion.div>
               </div>
             </div>
           </motion.div>

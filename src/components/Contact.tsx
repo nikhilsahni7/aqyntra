@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Send, CheckCircle2, Building, Globe2, User, Mail, Plus, Minus, MessageSquare, Tag, MapPin, Phone } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { FadeLeft, FadeRight, FadeUp } from "./AnimationUtils";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -48,16 +49,19 @@ export default function Contact() {
   };
 
   const inputClass = (field: string) =>
-    `w-full px-4 py-3 bg-cloud border rounded-xl text-deep text-[14px] focus:outline-none focus:ring-2 focus:ring-spring/20 transition-all placeholder:text-lichen/40 ${
+    `w-full px-4 py-3 bg-cloud border rounded-xl text-deep text-[14px] focus:outline-none focus:ring-2 focus:ring-spring/20 transition-all duration-200 placeholder:text-lichen/40 ${
       errors[field] ? "border-red-400" : "border-deep/[0.06] focus:border-spring"
     }`;
 
   return (
     <section id="contact" className="py-24 lg:py-32 bg-mist relative overflow-hidden">
+      {/* Ambient glow */}
+      <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[700px] h-[350px] bg-spring/[0.05] rounded-full blur-[120px] pointer-events-none" />
+
       <div className="max-w-6xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           {/* Left: Info sidebar */}
-          <div className="lg:col-span-4 flex flex-col items-start">
+          <FadeLeft className="lg:col-span-4 flex flex-col items-start">
             <span className="text-spring font-semibold text-[11px] uppercase tracking-[0.15em] mb-5">
               Contact Us
             </span>
@@ -70,44 +74,63 @@ export default function Contact() {
             </p>
 
             <div className="flex flex-col gap-5 w-full">
-              <div className="flex gap-3 items-start">
-                <div className="w-9 h-9 rounded-lg bg-spring/10 text-spring flex items-center justify-center shrink-0 mt-0.5">
-                  <MapPin className="w-4 h-4" />
-                </div>
-                <div className="text-[13px] text-lichen leading-relaxed">
-                  Vishal Singh Global<br />
-                  B088, DLF Prime Tower, Pocket F,<br />
-                  Okhla Industrial Area Phase I,<br />
-                  New Delhi - 110020, India
-                </div>
-              </div>
-              <div className="flex gap-3 items-center">
-                <div className="w-9 h-9 rounded-lg bg-spring/10 text-spring flex items-center justify-center shrink-0">
-                  <Phone className="w-4 h-4" />
-                </div>
-                <a href="tel:+918059596425" className="text-[13px] text-lichen hover:text-deep transition-colors">
-                  +91 8059596425
-                </a>
-              </div>
-              <div className="flex gap-3 items-center">
-                <div className="w-9 h-9 rounded-lg bg-spring/10 text-spring flex items-center justify-center shrink-0">
-                  <Mail className="w-4 h-4" />
-                </div>
-                <div className="flex flex-col">
-                  <a href="mailto:info@aqyntra.com" className="text-[13px] text-lichen hover:text-deep transition-colors">
-                    info@aqyntra.com
-                  </a>
-                  <a href="mailto:vishalsingh260796@gmail.com" className="text-[11px] text-lichen/50 hover:text-lichen transition-colors">
-                    vishalsingh260796@gmail.com
-                  </a>
-                </div>
-              </div>
+              {[
+                {
+                  icon: MapPin,
+                  content: (
+                    <div className="text-[13px] text-lichen leading-relaxed">
+                      Vishal Singh Global<br />
+                      B088, DLF Prime Tower, Pocket F,<br />
+                      Okhla Industrial Area Phase I,<br />
+                      New Delhi - 110020, India
+                    </div>
+                  ),
+                },
+                {
+                  icon: Phone,
+                  content: (
+                    <a href="tel:+918059596425" className="text-[13px] text-lichen hover:text-deep transition-colors">
+                      +91 8059596425
+                    </a>
+                  ),
+                },
+                {
+                  icon: Mail,
+                  content: (
+                    <div className="flex flex-col">
+                      <a href="mailto:info@aqyntra.com" className="text-[13px] text-lichen hover:text-deep transition-colors">
+                        info@aqyntra.com
+                      </a>
+                      <a href="mailto:vishalsingh260796@gmail.com" className="text-[11px] text-lichen/50 hover:text-lichen transition-colors">
+                        vishalsingh260796@gmail.com
+                      </a>
+                    </div>
+                  ),
+                },
+              ].map((item, i) => {
+                const Icon = item.icon;
+                return (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ duration: 0.5, delay: 0.1 + i * 0.1, ease: [0.22, 1, 0.36, 1] }}
+                    className="flex gap-3 items-start"
+                  >
+                    <div className="w-9 h-9 rounded-lg bg-spring/10 text-spring flex items-center justify-center shrink-0 mt-0.5">
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    {item.content}
+                  </motion.div>
+                );
+              })}
             </div>
-          </div>
+          </FadeLeft>
 
           {/* Right: Form */}
-          <div className="lg:col-span-8">
-            <div className="bg-petal border border-deep/[0.04] rounded-2xl p-7 lg:p-10 shadow-sm">
+          <FadeRight delay={0.1} className="lg:col-span-8">
+            <div className="bg-petal border border-deep/[0.04] rounded-2xl p-7 lg:p-10 shadow-sm hover:shadow-md transition-shadow duration-400">
               <AnimatePresence mode="wait">
                 {!submitted ? (
                   <motion.form
@@ -115,7 +138,8 @@ export default function Contact() {
                     onSubmit={handleSubmit}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
                     className="flex flex-col gap-5"
                   >
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -132,7 +156,13 @@ export default function Contact() {
                           className={inputClass("companyName")}
                         />
                         {errors.companyName && (
-                          <span className="text-red-500 text-[10px] font-medium">{errors.companyName}</span>
+                          <motion.span
+                            initial={{ opacity: 0, y: -4 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="text-red-500 text-[10px] font-medium"
+                          >
+                            {errors.companyName}
+                          </motion.span>
                         )}
                       </div>
 
@@ -149,7 +179,13 @@ export default function Contact() {
                           className={inputClass("country")}
                         />
                         {errors.country && (
-                          <span className="text-red-500 text-[10px] font-medium">{errors.country}</span>
+                          <motion.span
+                            initial={{ opacity: 0, y: -4 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="text-red-500 text-[10px] font-medium"
+                          >
+                            {errors.country}
+                          </motion.span>
                         )}
                       </div>
                     </div>
@@ -168,7 +204,13 @@ export default function Contact() {
                           className={inputClass("contactPerson")}
                         />
                         {errors.contactPerson && (
-                          <span className="text-red-500 text-[10px] font-medium">{errors.contactPerson}</span>
+                          <motion.span
+                            initial={{ opacity: 0, y: -4 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="text-red-500 text-[10px] font-medium"
+                          >
+                            {errors.contactPerson}
+                          </motion.span>
                         )}
                       </div>
 
@@ -185,7 +227,13 @@ export default function Contact() {
                           className={inputClass("email")}
                         />
                         {errors.email && (
-                          <span className="text-red-500 text-[10px] font-medium">{errors.email}</span>
+                          <motion.span
+                            initial={{ opacity: 0, y: -4 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="text-red-500 text-[10px] font-medium"
+                          >
+                            {errors.email}
+                          </motion.span>
                         )}
                       </div>
                     </div>
@@ -217,7 +265,7 @@ export default function Contact() {
                           <button
                             type="button"
                             onClick={() => adjustQuantity(-5000)}
-                            className="px-3.5 py-3 hover:bg-mist text-lichen transition-colors cursor-pointer"
+                            className="px-3.5 py-3 hover:bg-mist text-lichen transition-colors cursor-pointer active:scale-95"
                             aria-label="Decrease quantity"
                           >
                             <Minus className="w-3.5 h-3.5" />
@@ -233,14 +281,20 @@ export default function Contact() {
                           <button
                             type="button"
                             onClick={() => adjustQuantity(5000)}
-                            className="px-3.5 py-3 hover:bg-mist text-lichen transition-colors cursor-pointer"
+                            className="px-3.5 py-3 hover:bg-mist text-lichen transition-colors cursor-pointer active:scale-95"
                             aria-label="Increase quantity"
                           >
                             <Plus className="w-3.5 h-3.5" />
                           </button>
                         </div>
                         {errors.quantity && (
-                          <span className="text-red-500 text-[10px] font-medium">{errors.quantity}</span>
+                          <motion.span
+                            initial={{ opacity: 0, y: -4 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="text-red-500 text-[10px] font-medium"
+                          >
+                            {errors.quantity}
+                          </motion.span>
                         )}
                       </div>
                     </div>
@@ -255,29 +309,37 @@ export default function Contact() {
                         placeholder="Custom design demands, logistics requirements, shipping schedules..."
                         value={formData.message}
                         onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                        className="w-full px-4 py-3 bg-cloud border border-deep/[0.06] rounded-xl text-deep text-[14px] focus:outline-none focus:ring-2 focus:ring-spring/20 transition-all resize-y placeholder:text-lichen/40"
+                        className="w-full px-4 py-3 bg-cloud border border-deep/[0.06] rounded-xl text-deep text-[14px] focus:outline-none focus:ring-2 focus:ring-spring/20 transition-all duration-200 resize-y placeholder:text-lichen/40"
                       />
                     </div>
 
-                    <button
+                    <motion.button
                       type="submit"
-                      className="flex items-center justify-center gap-2 bg-deep hover:bg-forest text-petal font-semibold py-3.5 rounded-xl w-full transition-all duration-300 shadow-md hover:shadow-lg mt-2 cursor-pointer group"
+                      whileHover={{ scale: 1.01, y: -1 }}
+                      whileTap={{ scale: 0.99 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex items-center justify-center gap-2 bg-deep hover:bg-forest text-petal font-semibold py-3.5 rounded-xl w-full transition-colors duration-300 shadow-md hover:shadow-lg mt-2 cursor-pointer group"
                     >
                       Send Business Inquiry
                       <Send className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                    </button>
+                    </motion.button>
                   </motion.form>
                 ) : (
                   <motion.div
                     key="success"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.4 }}
+                    initial={{ opacity: 0, scale: 0.94, y: 10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
                     className="flex flex-col items-center text-center py-16"
                   >
-                    <div className="w-14 h-14 rounded-full bg-spring/10 text-spring flex items-center justify-center mb-5">
+                    <motion.div
+                      initial={{ scale: 0, rotate: -20 }}
+                      animate={{ scale: 1, rotate: 0 }}
+                      transition={{ duration: 0.5, delay: 0.15, type: "spring", stiffness: 200, damping: 14 }}
+                      className="w-14 h-14 rounded-full bg-spring/10 text-spring flex items-center justify-center mb-5"
+                    >
                       <CheckCircle2 className="w-8 h-8" />
-                    </div>
+                    </motion.div>
                     <h3 className="font-display font-bold text-2xl text-deep mb-3">
                       Inquiry Sent Successfully
                     </h3>
@@ -300,7 +362,7 @@ export default function Contact() {
                         });
                         setSubmitted(false);
                       }}
-                      className="px-6 py-2.5 bg-mist hover:bg-cloud text-deep font-medium text-[14px] rounded-full transition-colors cursor-pointer"
+                      className="px-6 py-2.5 bg-mist hover:bg-cloud text-deep font-medium text-[14px] rounded-full transition-colors cursor-pointer hover:-translate-y-0.5 transition-all duration-200"
                     >
                       Submit Another Inquiry
                     </button>
@@ -308,7 +370,7 @@ export default function Contact() {
                 )}
               </AnimatePresence>
             </div>
-          </div>
+          </FadeRight>
         </div>
       </div>
     </section>

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { Eye, Target, Sparkles, Quote } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { FadeLeft, FadeRight, FadeUp } from "./AnimationUtils";
 
 const tabs = [
   {
@@ -34,10 +35,13 @@ export default function About() {
 
   return (
     <section id="about" className="py-24 lg:py-32 bg-mist relative overflow-hidden">
+      {/* Subtle background orb */}
+      <div className="absolute -left-32 top-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-spring/[0.04] blur-[120px] pointer-events-none" />
+
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
           {/* Left: Story and Tabs */}
-          <div className="flex flex-col items-start">
+          <FadeLeft className="flex flex-col items-start">
             <span className="text-spring font-semibold text-[11px] uppercase tracking-[0.15em] mb-5">
               About AQYNTRA
             </span>
@@ -83,10 +87,10 @@ export default function About() {
                   return (
                     <motion.p
                       key={tab.id}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -8 }}
-                      transition={{ duration: 0.2 }}
+                      initial={{ opacity: 0, y: 8, filter: "blur(2px)" }}
+                      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                      exit={{ opacity: 0, y: -8, filter: "blur(2px)" }}
+                      transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                       className="text-lichen text-[15px] leading-relaxed max-w-lg"
                     >
                       {tab.content}
@@ -95,17 +99,21 @@ export default function About() {
                 })}
               </AnimatePresence>
             </div>
-          </div>
+          </FadeLeft>
 
           {/* Right: Image + Quote */}
-          <div className="flex flex-col gap-5">
+          <FadeRight delay={0.1} className="flex flex-col gap-5">
             {/* Image card */}
-            <div className="relative h-[340px] lg:h-[400px] rounded-2xl overflow-hidden">
+            <motion.div
+              className="relative h-[340px] lg:h-[400px] rounded-2xl overflow-hidden"
+              whileHover={{ scale: 1.015 }}
+              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+            >
               <Image
-                src="/hero_bottle.png"
+                src="/bottles.jpeg"
                 alt="Biodegradable water bottle"
                 fill
-                className="object-cover"
+                className="object-cover transition-transform duration-700 hover:scale-105"
                 sizes="(max-width: 1024px) 100vw, 50vw"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-deep/50 to-transparent" />
@@ -114,25 +122,27 @@ export default function About() {
                   Natural Packaged Drinking Water
                 </span>
               </div>
-            </div>
+            </motion.div>
 
             {/* Quote */}
-            <div className="bg-petal rounded-2xl p-7 border border-deep/[0.04] relative overflow-hidden">
-              <Quote className="w-20 h-20 text-spring/[0.06] absolute -right-2 -bottom-2 rotate-180" />
-              <div className="w-8 h-8 rounded-lg bg-spring/10 flex items-center justify-center text-spring mb-4">
-                <Quote className="w-4 h-4" />
+            <FadeUp delay={0.2}>
+              <div className="bg-petal rounded-2xl p-7 border border-deep/[0.04] relative overflow-hidden group hover:border-spring/20 hover:shadow-lg hover:shadow-spring/[0.05] transition-all duration-400">
+                <Quote className="w-20 h-20 text-spring/[0.06] absolute -right-2 -bottom-2 rotate-180" />
+                <div className="w-8 h-8 rounded-lg bg-spring/10 flex items-center justify-center text-spring mb-4 group-hover:bg-spring/20 transition-colors duration-300">
+                  <Quote className="w-4 h-4" />
+                </div>
+                <blockquote className="font-display font-semibold text-lg text-deep leading-snug mb-3 relative z-10">
+                  &ldquo;We don&rsquo;t just make bottles, we protect tomorrow.&rdquo;
+                </blockquote>
+                <div className="flex items-center gap-2">
+                  <span className="w-4 h-[2px] bg-spring rounded-full" />
+                  <span className="text-[11px] font-semibold text-lichen tracking-wider uppercase">
+                    AQYNTRA Team
+                  </span>
+                </div>
               </div>
-              <blockquote className="font-display font-semibold text-lg text-deep leading-snug mb-3 relative z-10">
-                &ldquo;We don&rsquo;t just make bottles, we protect tomorrow.&rdquo;
-              </blockquote>
-              <div className="flex items-center gap-2">
-                <span className="w-4 h-[2px] bg-spring rounded-full" />
-                <span className="text-[11px] font-semibold text-lichen tracking-wider uppercase">
-                  AQYNTRA Team
-                </span>
-              </div>
-            </div>
-          </div>
+            </FadeUp>
+          </FadeRight>
         </div>
       </div>
     </section>

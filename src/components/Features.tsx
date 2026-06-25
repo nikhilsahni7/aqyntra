@@ -1,7 +1,10 @@
 "use client";
 
 import { Award, Leaf, ShieldCheck, Recycle, Trees } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
+import { FadeUp, StaggerContainer } from "./AnimationUtils";
+
+const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
 
 const features = [
   {
@@ -36,29 +39,37 @@ const features = [
   },
 ];
 
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 24, filter: "blur(2px)" },
+  show: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.55, ease: EASE },
+  },
+};
+
 export default function Features() {
   return (
-    <section className="py-20 bg-petal relative">
+    <section className="py-20 bg-petal relative overflow-hidden">
+      {/* Subtle bottom-right glow */}
+      <div className="absolute right-0 bottom-0 w-96 h-96 bg-spring/[0.05] rounded-full blur-[100px] pointer-events-none" />
+
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         {/* Section header */}
-        <div className="text-center max-w-2xl mx-auto mb-14">
+        <FadeUp className="text-center max-w-2xl mx-auto mb-14">
           <h2 className="font-display font-bold text-3xl md:text-4xl text-deep tracking-tight mb-4">
             Why Biodegradable?
           </h2>
           <p className="text-lichen text-[15px] leading-relaxed">
             AQYNTRA merges materials science with daily hydration. Our organic solutions are replacing petroleum-based bottles globally.
           </p>
-        </div>
+        </FadeUp>
 
         {/* Features strip */}
-        <motion.div
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "-80px" }}
-          variants={{
-            hidden: { opacity: 0 },
-            show: { opacity: 1, transition: { staggerChildren: 0.08 } },
-          }}
+        <StaggerContainer
+          delayChildren={0.05}
+          staggerChildren={0.09}
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4"
         >
           {features.map((feature, i) => {
@@ -66,14 +77,15 @@ export default function Features() {
             return (
               <motion.div
                 key={i}
-                variants={{
-                  hidden: { opacity: 0, y: 24 },
-                  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-                }}
-                className="group relative bg-cloud hover:bg-petal rounded-2xl p-6 border border-deep/[0.04] hover:border-spring/20 hover:shadow-lg hover:shadow-spring/[0.04] transition-all duration-300"
+                variants={cardVariants}
+                whileHover={{ y: -4, transition: { duration: 0.25, ease: "easeOut" } }}
+                className="group relative bg-cloud hover:bg-petal rounded-2xl p-6 border border-deep/[0.04] hover:border-spring/20 hover:shadow-lg hover:shadow-spring/[0.06] transition-colors duration-300 cursor-default"
               >
+                {/* Subtle hover shimmer line at top */}
+                <div className="absolute top-0 left-0 right-0 h-[2px] rounded-t-2xl bg-gradient-to-r from-transparent via-spring/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
+
                 <div
-                  className={`w-10 h-10 rounded-xl ${feature.accent} flex items-center justify-center mb-4`}
+                  className={`w-10 h-10 rounded-xl ${feature.accent} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}
                 >
                   <Icon className="w-5 h-5" />
                 </div>
@@ -86,7 +98,7 @@ export default function Features() {
               </motion.div>
             );
           })}
-        </motion.div>
+        </StaggerContainer>
       </div>
     </section>
   );

@@ -97,3 +97,54 @@ body {
   background: #B8E6C4;
   color: #0A1F14;
 }
+
+/* ─── Scroll progress indicator ─────────────────────── */
+@property --scroll-pct {
+  syntax: "<percentage>";
+  inherits: true;
+  initial-value: 0%;
+}
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #5DBA72, #B8E6C4);
+  transform-origin: left;
+  transform: scaleX(var(--scroll-pct, 0%));
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* ─── Link transitions ───────────────────────────────── */
+a {
+  transition-property: color, opacity;
+  transition-duration: 200ms;
+  transition-timing-function: ease;
+}
+
+/* ─── Smooth image rendering ─────────────────────────── */
+img {
+  will-change: transform;
+}
+
+/* ─── Subtle section divider ─────────────────────────── */
+.section-divider {
+  width: 48px;
+  height: 3px;
+  background: linear-gradient(90deg, #5DBA72, #B8E6C4);
+  border-radius: 99px;
+  margin-bottom: 1.25rem;
+}
+
+/* ─── Hover lift utility ─────────────────────────────── */
+.hover-lift {
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hover-lift:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(93, 186, 114, 0.1);
+}
