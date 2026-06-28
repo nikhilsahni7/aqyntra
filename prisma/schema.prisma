@@ -1,0 +1,19 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Inquiry {
+  id            String   @id @default(uuid())
+  companyName   String
+  country       String
+  contactPerson String
+  email         String
+  quantity      Int
+  productType   String
+  message       String
+  createdAt     DateTime @default(now())
+}

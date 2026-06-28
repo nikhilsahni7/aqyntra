@@ -15,9 +15,9 @@ const slides = [
     headline: "Pure Nature.\nPure Future.",
     accentWord: "Nature",
     description:
-      "Our bottles return to nature — not to landfill. Manufactured using biodegradable materials designed to reduce long-term environmental impact.",
-    cta: { label: "Request Quotation", href: "#contact" },
-    ctaSecondary: { label: "View Products", href: "#products" },
+      "AQYNTRA develops biodegradable packaging solutions designed to reduce long-term environmental impact. Our bottles return to nature — not to landfill.",
+    cta: { label: "Request Pricing", href: "#contact" },
+    ctaSecondary: { label: "Explore Products", href: "#products" },
   },
   {
     id: "bottles",
@@ -28,7 +28,7 @@ const slides = [
     headline: "Every Size.\nOne Mission.",
     accentWord: "Size",
     description:
-      "Available in 250ml, 500ml, 750ml, and 1000ml — designed for retail, hospitality, fitness, and travel markets worldwide.",
+      "Available in 250 ml, 500 ml and 1000 ml formats, designed for retail, hospitality, airlines and private-label brands worldwide.",
     cta: { label: "Explore Products", href: "#products" },
     ctaSecondary: { label: "Get Pricing", href: "#contact" },
   },
@@ -54,17 +54,17 @@ const slides = [
     headline: "Protect What\nMatters Most.",
     accentWord: "Matters",
     description:
-      "Every AQYNTRA bottle that decomposes naturally is one less piece of permanent plastic threatening marine ecosystems.",
+      "AQYNTRA packaging is designed to reduce dependence on conventional plastics and support cleaner ecosystems.",
     cta: { label: "Our Impact", href: "#sustainability" },
     ctaSecondary: { label: "Partner With Us", href: "#contact" },
   },
 ];
 
 const stats = [
-  { value: "45%", label: "Lower Carbon" },
-  { value: "50+", label: "Countries" },
-  { value: "100%", label: "Plant-Based" },
-  { value: "0", label: "Microplastics" },
+  { value: "Up to 45%*", label: "Compared with virgin PET" },
+  { value: "20+", label: "Target Markets" },
+  { value: "Bio-based", label: "Material Options" },
+  { value: "Reduced", label: "Plastic Waste" },
 ];
 
 function BadgeIcon({ type }: { type: string }) {
@@ -161,7 +161,7 @@ export default function Hero() {
           animation: shimmer-badge 3s linear infinite;
         }
         .headline-gradient-text {
-          background: linear-gradient(135deg, #ffffff 0%, #d4f5de 100%);
+          background: linear-gradient(135deg, #ffffff 0%, #eefbf3 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -171,7 +171,10 @@ export default function Hero() {
           height: 4px;
           border-radius: 99px;
           display: block;
-          margin-top: 6px;
+          margin-top: 8px;
+        }
+        @keyframes sheen {
+          100% { left: 125%; }
         }
       `}</style>
 
@@ -192,6 +195,7 @@ export default function Hero() {
             alt={slide.badge}
             fill
             priority={current === 0}
+            loading="eager"
             className="object-cover"
             style={{ objectPosition: slide.imgPosition }}
             sizes="100vw"
@@ -237,16 +241,34 @@ export default function Hero() {
 
                 {/* Headline */}
                 <h1 className="font-display font-extrabold text-5xl sm:text-6xl lg:text-[4.5rem] xl:text-[5rem] leading-[1.02] tracking-[-0.02em] mb-2 whitespace-pre-line">
-                  {slide.headline.split("\n").map((line, i) => (
-                    <span key={i} className={`block ${i === 0 ? "headline-gradient-text" : "text-white/90"}`}>
-                      {line}
-                      {i === 0 && <span className="accent-line" style={{ width: "3.5rem" }} />}
-                    </span>
-                  ))}
+                  {slide.headline.split("\n").map((line, i) => {
+                    const hasAccent = line.includes(slide.accentWord);
+                    let lineContent: React.ReactNode = line;
+
+                    if (hasAccent) {
+                      const parts = line.split(slide.accentWord);
+                      lineContent = (
+                        <>
+                          {parts[0]}
+                          <span className="font-serif italic font-normal text-[#B8E6C4] text-glow-green tracking-normal">
+                            {slide.accentWord}
+                          </span>
+                          {parts[1]}
+                        </>
+                      );
+                    }
+
+                    return (
+                      <span key={i} className={`block ${i === 0 ? "headline-gradient-text" : "text-white/95"}`}>
+                        {lineContent}
+                        {i === 0 && <span className="accent-line" style={{ width: "3.5rem" }} />}
+                      </span>
+                    );
+                  })}
                 </h1>
 
                 {/* Description */}
-                <p className="text-white/60 text-base lg:text-[17px] max-w-[480px] leading-[1.75] mb-9 mt-2">
+                <p className="text-white/60 text-base lg:text-[17px] max-w-[480px] leading-[1.75] mb-9 mt-4 font-sans">
                   {slide.description}
                 </p>
 
@@ -254,14 +276,18 @@ export default function Hero() {
                 <div className="flex flex-wrap gap-3.5">
                   <a
                     href={slide.cta.href}
-                    className="group flex items-center gap-2.5 bg-[#5DBA72] hover:bg-[#4ea862] text-[#0A1F14] font-bold px-7 py-3.5 rounded-full transition-all duration-300 shadow-[0_8px_30px_rgba(93,186,114,0.35)] hover:shadow-[0_12px_40px_rgba(93,186,114,0.5)] text-[14.5px] hover:-translate-y-0.5"
+                    className="group relative overflow-hidden flex items-center gap-2.5 bg-[#5DBA72] hover:bg-[#6cce80] text-[#0A1F14] font-bold px-7 py-3.5 rounded-full transition-all duration-300 shadow-[0_8px_30px_rgba(93,186,114,0.3)] hover:shadow-[0_12px_40px_rgba(93,186,114,0.45)] text-[14.5px] hover:-translate-y-0.5 active:scale-95 cursor-pointer"
                   >
-                    {slide.cta.label}
-                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                    {/* Visual shine card */}
+                    <span className="absolute top-0 -left-[100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/25 to-transparent skew-x-12 group-hover:animate-[sheen_1.2s_ease]" />
+                    <span className="relative z-10 flex items-center gap-2.5">
+                      {slide.cta.label}
+                      <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+                    </span>
                   </a>
                   <a
                     href={slide.ctaSecondary.href}
-                    className="group flex items-center gap-2 bg-white/[0.07] hover:bg-white/[0.13] text-white font-semibold px-7 py-3.5 rounded-full border border-white/[0.15] hover:border-white/[0.25] transition-all duration-300 text-[14.5px] backdrop-blur-sm"
+                    className="group flex items-center gap-2 bg-white/[0.06] hover:bg-white/[0.12] text-white font-semibold px-7 py-3.5 rounded-full border border-white/[0.12] hover:border-white/[0.22] transition-all duration-300 text-[14.5px] backdrop-blur-sm hover:-translate-y-0.5 active:scale-95"
                   >
                     {slide.ctaSecondary.label}
                   </a>
@@ -394,6 +420,10 @@ export default function Hero() {
             ))}
           </motion.div>
         </div>
+        {/* Stat footnote */}
+        <p className="text-white/20 text-[9px] mt-2 text-right italic">
+          *Indicative estimate. Subject to material composition and independent verification.
+        </p>
       </div>
     </section>
   );

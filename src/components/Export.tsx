@@ -11,25 +11,25 @@ const regions = [
     name: "Middle East",
     ports: "Jebel Ali, Jeddah, Hamad, Khalifa",
     demand: "High demand in luxury hospitality, hotels, and retail sectors.",
-    badge: "Active",
+    badge: "Target Market",
   },
   {
     name: "Europe",
     ports: "Rotterdam, Antwerp, Hamburg, Felixstowe",
     demand: "Leading strict compliance with plastic reduction mandates.",
-    badge: "Active",
+    badge: "Target Market",
   },
   {
     name: "North America",
     ports: "Los Angeles, Newark, Savannah, Vancouver",
     demand: "Fast-growing adoption among airlines and premium brands.",
-    badge: "Active",
+    badge: "Target Market",
   },
   {
     name: "Africa",
     ports: "Durban, Mombasa, Lagos, Port Said",
     demand: "Supporting sustainable developmental and tourism projects.",
-    badge: "Expanding",
+    badge: "Target Market",
   },
 ];
 
@@ -45,12 +45,10 @@ const cardVariants: Variants = {
 
 export default function Export() {
   return (
-    <section id="export" className="py-24 lg:py-32 bg-deep relative overflow-hidden">
-      {/* Subtle background texture */}
-      <div className="absolute inset-0 bg-[radial-gradient(rgba(93,186,114,0.04)_1px,transparent_1px)] [background-size:32px_32px] pointer-events-none" />
-      {/* Ambient glow */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-spring/[0.04] rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-spring/[0.03] rounded-full blur-[120px] pointer-events-none" />
+    <section id="export" className="py-24 lg:py-32 bg-deep relative overflow-hidden bg-grid-pattern-dark">
+      {/* Ambient glows */}
+      <div className="absolute top-[-10%] right-0 w-[500px] h-[500px] bg-spring/[0.05] rounded-full blur-[150px] pointer-events-none float-slow-1" />
+      <div className="absolute bottom-[-10%] left-0 w-[400px] h-[400px] bg-spring/[0.03] rounded-full blur-[120px] pointer-events-none float-slow-2" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
@@ -62,7 +60,7 @@ export default function Export() {
             <h2 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-[2.75rem] text-petal tracking-tight mb-6 leading-[1.15]">
               Global Supply.
               <br />
-              <span className="text-spring">Nature-Aligned.</span>
+              <span className="text-spring font-serif italic font-semibold">Nature-Aligned.</span>
             </h2>
 
             <p className="text-petal/60 text-[15px] leading-relaxed mb-6 border-l-2 border-spring/40 pl-4 italic">
@@ -71,11 +69,23 @@ export default function Export() {
               label brands worldwide.&rdquo;
             </p>
 
-            <p className="text-petal/50 text-[14px] leading-relaxed mb-10">
+            <p className="text-petal/50 text-[14px] leading-relaxed mb-8">
               Leveraging robust logistics partners to guarantee secure,
               port-to-port deliveries. Our materials meet food-grade standards
               internationally, ensuring seamless customs clearing.
             </p>
+
+            {/* Asset-Light Model highlight */}
+            <div className="bg-petal/[0.05] border border-spring/20 rounded-xl p-5 mb-8">
+              <span className="text-spring text-[10px] font-bold uppercase tracking-[0.14em] block mb-2">
+                Asset-Light Manufacturing Model
+              </span>
+              <p className="text-petal/60 text-[13px] leading-relaxed">
+                AQYNTRA collaborates with approved preform manufacturers, bottle blowing
+                facilities and bottling partners — while managing branding, quality
+                assurance and international customer relationships.
+              </p>
+            </div>
 
             {/* Stats */}
             <StaggerContainer
@@ -84,8 +94,8 @@ export default function Export() {
               className="grid grid-cols-2 gap-8 w-full pt-8 border-t border-petal/[0.08]"
             >
               {[
-                { value: "50+", label: "Countries We Serve" },
-                { value: "100%", label: "Logistics Security" },
+                { value: "20+", label: "Countries Targeted" },
+                { value: "Reliable", label: "Export Partners" },
               ].map((stat) => (
                 <motion.div
                   key={stat.label}
@@ -116,9 +126,11 @@ export default function Export() {
               <motion.div
                 key={index}
                 variants={cardVariants}
-                whileHover={{ y: -4, transition: { duration: 0.25, ease: "easeOut" } }}
-                className="bg-petal/[0.05] backdrop-blur-sm rounded-2xl p-6 border border-petal/[0.08] hover:border-spring/25 hover:bg-petal/[0.09] transition-colors duration-300 flex flex-col justify-between group"
+                whileHover={{ y: -6, scale: 1.015, transition: { duration: 0.25, ease: "easeOut" } }}
+                className="bg-petal/[0.04] backdrop-blur-sm rounded-2xl p-6 border border-petal/[0.08] hover:border-spring/35 hover:bg-petal/[0.07] hover:shadow-[0_15px_30px_rgba(93,186,114,0.05)] transition-all duration-300 flex flex-col justify-between group relative overflow-hidden"
               >
+                {/* Hover glow radial overlay */}
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(93,186,114,0.06)_0%,transparent_70%)] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                 {/* Top shimmer on hover */}
                 <div className="absolute top-0 left-0 right-0 h-[1px] rounded-t-2xl bg-gradient-to-r from-transparent via-spring/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-400" />
 
@@ -129,9 +141,9 @@ export default function Export() {
                     </div>
                     <span
                       className={`text-[9px] uppercase font-bold tracking-widest px-2.5 py-1 rounded-full ${
-                        reg.badge === "Active"
-                          ? "bg-spring/15 text-spring"
-                          : "bg-amber-500/15 text-amber-400"
+                        reg.badge === "Target Market"
+                          ? "bg-sky-400/15 text-sky-400"
+                          : "bg-spring/15 text-spring"
                       }`}
                     >
                       {reg.badge}

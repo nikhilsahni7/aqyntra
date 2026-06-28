@@ -19,14 +19,14 @@ const tabs = [
     title: "Mission",
     icon: Target,
     content:
-      "To deliver high-performance, cost-effective biodegradable packaging solutions and preforms to importers, distributors, hotels, airlines, and brands worldwide. We empower enterprises to adopt sustainable operations without compromising on quality or production speed.",
+      "AQYNTRA enables businesses worldwide to adopt sustainable hydration solutions through strategic manufacturing partnerships, premium branding and export-ready supply chains.",
   },
   {
     id: "commitment",
     title: "Commitment",
     icon: Sparkles,
     content:
-      "We commit to strict ecological integrity. All of our material blends are designed to degrade into non-toxic components, lowering raw carbon footprints by over 45% compared to virgin PET, and maintaining complete circular economy standards.",
+      "We commit to strict ecological integrity. All of our material blends are designed to break down into simpler compounds under suitable biodegradation conditions, with a potential to lower raw carbon footprints compared to virgin PET, and maintaining complete circular economy standards.",
   },
 ];
 
@@ -34,9 +34,10 @@ export default function About() {
   const [activeTab, setActiveTab] = useState("vision");
 
   return (
-    <section id="about" className="py-24 lg:py-32 bg-mist relative overflow-hidden">
-      {/* Subtle background orb */}
-      <div className="absolute -left-32 top-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-spring/[0.04] blur-[120px] pointer-events-none" />
+    <section id="about" className="py-24 lg:py-32 bg-mist relative overflow-hidden bg-grid-pattern">
+      {/* Subtle background orbs */}
+      <div className="absolute -left-32 top-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full bg-spring/[0.04] blur-[120px] pointer-events-none float-slow-1" />
+      <div className="absolute right-[-10%] top-[10%] w-[400px] h-[400px] bg-[#B8E6C4]/[0.03] rounded-full blur-[100px] pointer-events-none float-slow-2" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
@@ -48,7 +49,7 @@ export default function About() {
             <h2 className="font-display font-extrabold text-3xl sm:text-4xl lg:text-[2.75rem] text-deep tracking-tight mb-5 leading-[1.15]">
               A Small Change Today,
               <br />
-              <span className="text-spring">A Better Tomorrow</span>
+              <span className="text-spring font-serif italic font-semibold">A Better Tomorrow</span>
             </h2>
             <p className="text-lichen text-[15px] leading-relaxed mb-10 max-w-lg">
               AQYNTRA was born out of a simple belief — that sustainability
@@ -58,7 +59,7 @@ export default function About() {
             </p>
 
             {/* Tabs */}
-            <div className="flex gap-1 mb-5 bg-petal rounded-xl p-1 border border-deep/[0.04]">
+            <div className="flex gap-1.5 mb-5 bg-petal rounded-xl p-1 border border-deep/[0.04]">
               {tabs.map((tab) => {
                 const Icon = tab.icon;
                 const isActive = activeTab === tab.id;
@@ -66,10 +67,10 @@ export default function About() {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
-                    className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg font-medium text-[13px] transition-all duration-200 cursor-pointer ${
+                    className={`flex items-center gap-1.5 px-4 py-2.5 rounded-lg font-medium text-[13px] transition-all duration-300 cursor-pointer hover:scale-[1.02] active:scale-95 ${
                       isActive
-                        ? "bg-deep text-petal shadow-sm"
-                        : "text-lichen hover:text-deep"
+                        ? "bg-deep text-petal shadow-[0_4px_12px_rgba(10,31,20,0.15)]"
+                        : "text-lichen hover:text-deep hover:bg-mist/50"
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />

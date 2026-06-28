@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Send, CheckCircle2, Building, Globe2, User, Mail, Plus, Minus, MessageSquare, Tag, MapPin, Phone } from "lucide-react";
+import { Send, CheckCircle2, Building, Globe2, User, Mail, Plus, Minus, MessageSquare, Tag, MapPin, Phone, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { FadeLeft, FadeRight, FadeUp } from "./AnimationUtils";
 
@@ -18,6 +18,8 @@ export default function Contact() {
 
   const [submitted, setSubmitted] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const validate = () => {
     const newErrors: Record<string, string> = {};
@@ -34,10 +36,32 @@ export default function Contact() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validate()) {
-      setSubmitted(true);
+      setIsSubmitting(true);
+      setSubmitError("");
+      try {
+        const response = await fetch("/api/contact", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.message || "Failed to submit inquiry.");
+        }
+
+        setSubmitted(true);
+      } catch (err: any) {
+        setSubmitError(err.message || "Failed to send inquiry. Please check your connection and try again.");
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
@@ -49,14 +73,15 @@ export default function Contact() {
   };
 
   const inputClass = (field: string) =>
-    `w-full px-4 py-3 bg-cloud border rounded-xl text-deep text-[14px] focus:outline-none focus:ring-2 focus:ring-spring/20 transition-all duration-200 placeholder:text-lichen/40 ${
-      errors[field] ? "border-red-400" : "border-deep/[0.06] focus:border-spring"
+    `w-full px-4 py-3 bg-cloud border rounded-xl text-deep text-[14px] focus:outline-none focus:ring-2 focus:ring-spring/30 transition-all duration-300 placeholder:text-lichen/40 ${
+      errors[field] ? "border-red-400" : "border-deep/[0.06] focus:border-spring focus:shadow-[0_0_12px_rgba(93,186,114,0.15)]"
     }`;
 
   return (
-    <section id="contact" className="py-24 lg:py-32 bg-mist relative overflow-hidden">
-      {/* Ambient glow */}
-      <div className="absolute left-1/2 -translate-x-1/2 bottom-0 w-[700px] h-[350px] bg-spring/[0.05] rounded-full blur-[120px] pointer-events-none" />
+    <section id="contact" className="py-24 lg:py-32 bg-mist relative overflow-hidden bg-grid-pattern">
+      {/* Ambient background glows */}
+      <div className="absolute left-[-10%] bottom-[-10%] w-[700px] h-[350px] bg-spring/[0.04] rounded-full blur-[120px] pointer-events-none float-slow-1" />
+      <div className="absolute right-[-10%] top-[-10%] w-[500px] h-[500px] bg-spring/[0.03] rounded-full blur-[120px] pointer-events-none float-slow-2" />
 
       <div className="max-w-6xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
@@ -66,7 +91,7 @@ export default function Contact() {
               Contact Us
             </span>
             <h2 className="font-display font-bold text-3xl text-deep tracking-tight mb-4">
-              Partner With Us
+              Partner With <span className="font-serif italic font-semibold text-spring">Us</span>
             </h2>
             <p className="text-lichen text-[15px] leading-relaxed mb-10">
               Our global sales team will review your quantities and provide a
@@ -79,8 +104,8 @@ export default function Contact() {
                   icon: MapPin,
                   content: (
                     <div className="text-[13px] text-lichen leading-relaxed">
-                      Vishal Singh Global<br />
-                      B088, DLF Prime Tower, Pocket F,<br />
+                      AQYNTRA Global Sales Team<br />
+                      B-88, DLF Prime Tower, Pocket F,<br />
                       Okhla Industrial Area Phase I,<br />
                       New Delhi - 110020, India
                     </div>
@@ -100,9 +125,6 @@ export default function Contact() {
                     <div className="flex flex-col">
                       <a href="mailto:info@aqyntra.com" className="text-[13px] text-lichen hover:text-deep transition-colors">
                         info@aqyntra.com
-                      </a>
-                      <a href="mailto:vishalsingh260796@gmail.com" className="text-[11px] text-lichen/50 hover:text-lichen transition-colors">
-                        vishalsingh260796@gmail.com
                       </a>
                     </div>
                   ),
@@ -249,9 +271,9 @@ export default function Contact() {
                           onChange={(e) => setFormData({ ...formData, productType: e.target.value })}
                           className="w-full px-4 py-3 bg-cloud border border-deep/[0.06] rounded-xl text-deep text-[14px] focus:outline-none focus:ring-2 focus:ring-spring/20 transition-all appearance-none cursor-pointer"
                         >
-                          <option value="250ml Bottle">250ml Packaged Bottle</option>
-                          <option value="500ml Bottle">500ml Packaged Bottle</option>
-                          <option value="750ml Bottle">750ml Packaged Bottle</option>
+                          <option value="250ml Bottle">250 ml Biodegradable Water Bottle</option>
+                          <option value="500ml Bottle">500 ml Biodegradable Water Bottle</option>
+                          <option value="1000ml Bottle">1000 ml Biodegradable Water Bottle</option>
                           <option value="Biodegradable Preforms">Biodegradable Preforms</option>
                           <option value="Private Label Manufacturing">Private Label Manufacturing</option>
                         </select>
@@ -313,15 +335,39 @@ export default function Contact() {
                       />
                     </div>
 
+                    {submitError && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-4 bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl"
+                      >
+                        {submitError}
+                      </motion.div>
+                    )}
+
                     <motion.button
                       type="submit"
-                      whileHover={{ scale: 1.01, y: -1 }}
-                      whileTap={{ scale: 0.99 }}
+                      disabled={isSubmitting}
+                      whileHover={isSubmitting ? {} : { scale: 1.01, y: -1 }}
+                      whileTap={isSubmitting ? {} : { scale: 0.99 }}
                       transition={{ duration: 0.2 }}
-                      className="flex items-center justify-center gap-2 bg-deep hover:bg-forest text-petal font-semibold py-3.5 rounded-xl w-full transition-colors duration-300 shadow-md hover:shadow-lg mt-2 cursor-pointer group"
+                      className="group relative overflow-hidden flex items-center justify-center gap-2 bg-deep hover:bg-[#07160e] disabled:bg-deep/60 text-petal font-semibold py-3.5 rounded-xl w-full transition-all duration-300 shadow-md hover:shadow-[0_8px_30px_rgba(10,31,20,0.15)] mt-2 cursor-pointer disabled:cursor-not-allowed"
                     >
-                      Send Business Inquiry
-                      <Send className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      {/* Sheen anim */}
+                      <span className="absolute top-0 -left-[100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12 group-hover:animate-[sheen_1.4s_ease]" />
+                      <span className="relative z-10 flex items-center gap-2">
+                        {isSubmitting ? (
+                          <>
+                            Sending Inquiry...
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          </>
+                        ) : (
+                          <>
+                            Send Business Inquiry
+                            <Send className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                          </>
+                        )}
+                      </span>
                     </motion.button>
                   </motion.form>
                 ) : (
@@ -360,6 +406,7 @@ export default function Contact() {
                           productType: "500ml Bottle",
                           message: "",
                         });
+                        setSubmitError("");
                         setSubmitted(false);
                       }}
                       className="px-6 py-2.5 bg-mist hover:bg-cloud text-deep font-medium text-[14px] rounded-full transition-colors cursor-pointer hover:-translate-y-0.5 transition-all duration-200"

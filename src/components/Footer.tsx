@@ -97,6 +97,7 @@ export default function Footer() {
             Downloads
           </h4>
           <ul className="flex flex-col gap-2.5 text-[13px] text-petal/50">
+            {/* PDF links hidden until documents are available
             <li>
               <a
                 href="/docs/AQYNTRA_Product_Catalogue.pdf"
@@ -125,6 +126,8 @@ export default function Footer() {
                 Company Profile
               </a>
             </li>
+            */}
+            <li className="text-petal/30 text-[12px] italic">Documents coming soon.</li>
           </ul>
         </motion.div>
 

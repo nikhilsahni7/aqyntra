@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Features from "@/components/Features";
 import About from "@/components/About";
+import CompanyPositioning from "@/components/CompanyPositioning";
 import Products from "@/components/Products";
 import Export from "@/components/Export";
 import Sustainability from "@/components/Sustainability";
@@ -24,6 +25,9 @@ export default function Home() {
 
         {/* Story, Vision, Mission, Commitment */}
         <About />
+
+        {/* Company Business Model & Positioning */}
+        <CompanyPositioning />
 
         {/* Sizes, Preforms, and Private Label Catalog */}
         <Products />

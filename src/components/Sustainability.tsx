@@ -19,9 +19,10 @@ const pillarVariants: Variants = {
 
 export default function Sustainability() {
   return (
-    <section id="sustainability" className="py-24 lg:py-32 bg-petal relative overflow-hidden">
-      {/* Background texture glow */}
-      <div className="absolute right-0 top-0 w-[600px] h-[600px] bg-spring/[0.04] rounded-full blur-[140px] pointer-events-none" />
+    <section id="sustainability" className="py-24 lg:py-32 bg-petal relative overflow-hidden bg-grid-pattern">
+      {/* Ambient background glows */}
+      <div className="absolute right-[-10%] top-[-10%] w-[600px] h-[600px] bg-spring/[0.04] rounded-full blur-[140px] pointer-events-none float-slow-1" />
+      <div className="absolute left-[-10%] bottom-[-10%] w-[500px] h-[500px] bg-spring/[0.03] rounded-full blur-[120px] pointer-events-none float-slow-2" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         {/* Section header */}
@@ -30,11 +31,11 @@ export default function Sustainability() {
             Sustainability &amp; Science
           </span>
           <h2 className="font-display font-bold text-3xl md:text-4xl text-deep tracking-tight mb-4">
-            Designed for the Environment.
+            Designed for the <span className="font-serif italic font-semibold text-spring">Environment.</span>
           </h2>
           <p className="text-lichen text-[15px] leading-relaxed">
             Bottles designed to integrate back into earth&rsquo;s natural loops — 
-            from agricultural biomass to organic compost.
+            from agricultural biomass to industrial composting streams.
           </p>
         </FadeUp>
 
@@ -85,11 +86,7 @@ export default function Sustainability() {
               <ul className="text-[12px] text-lichen flex flex-col gap-1.5 font-medium">
                 <li className="flex gap-2 items-center">
                   <ShieldCheck className="w-3.5 h-3.5 text-spring shrink-0" />
-                  100% Plant-Derived Biomass Sourced
-                </li>
-                <li className="flex gap-2 items-center">
-                  <ShieldCheck className="w-3.5 h-3.5 text-spring shrink-0" />
-                  Zero petroleum chemical traces
+                  Bio-based feedstock options
                 </li>
               </ul>
             </motion.div>
@@ -117,7 +114,7 @@ export default function Sustainability() {
                 </li>
                 <li className="flex gap-2 items-center">
                   <ShieldCheck className="w-3.5 h-3.5 text-spring shrink-0" />
-                  No toxic chemical micro-residues
+                  Reduced persistence and lower potential for long-term microplastic accumulation
                 </li>
               </ul>
             </motion.div>
@@ -133,10 +130,10 @@ export default function Sustainability() {
                 </div>
                 <div>
                   <h3 className="font-display font-semibold text-[17px] text-deep mb-1">
-                    Carbon Footprint Savings
+                    Carbon Footprint Potential
                   </h3>
                   <p className="text-lichen text-[14px] leading-relaxed">
-                    Shifting from crude oil to agricultural biomass locks carbon inside the product lifecycle.
+                    Potential reduction in carbon footprint depending upon material selection and production route compared to virgin PET.
                   </p>
                 </div>
               </div>
@@ -144,40 +141,40 @@ export default function Sustainability() {
               <div className="flex flex-col gap-4 mt-auto">
                 {/* AQYNTRA bar */}
                 <div>
-                  <div className="flex justify-between text-[12px] font-medium text-deep mb-1.5">
+                  <div className="flex justify-between text-[12px] font-semibold text-deep mb-2">
                     <span>AQYNTRA</span>
-                    <span className="text-spring tabular-nums">1.2 kg CO₂/kg</span>
+                    <span className="text-spring tabular-nums font-bold">1.2 kg CO₂/kg</span>
                   </div>
-                  <div className="w-full bg-deep/[0.04] rounded-full h-3 overflow-hidden">
+                  <div className="w-full bg-deep/[0.06] rounded-full h-4 overflow-hidden p-[2px] shadow-inner">
                     <motion.div
                       initial={{ width: 0 }}
                       whileInView={{ width: "45%" }}
                       viewport={{ once: true }}
                       transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
-                      className="bg-spring h-full rounded-full"
+                      className="bg-gradient-to-r from-spring to-dew h-full rounded-full shadow-[0_0_12px_rgba(93,186,114,0.45)] relative overflow-hidden animate-[pulse_3s_infinite_ease-in-out]"
                     />
                   </div>
                 </div>
 
                 {/* PET bar */}
                 <div>
-                  <div className="flex justify-between text-[12px] font-medium text-deep mb-1.5">
+                  <div className="flex justify-between text-[12px] font-semibold text-deep mb-2">
                     <span>Virgin PET</span>
-                    <span className="text-lichen tabular-nums">2.2 kg CO₂/kg</span>
+                    <span className="text-lichen/80 tabular-nums">2.2 kg CO₂/kg</span>
                   </div>
-                  <div className="w-full bg-deep/[0.04] rounded-full h-3 overflow-hidden">
+                  <div className="w-full bg-deep/[0.06] rounded-full h-4 overflow-hidden p-[2px] shadow-inner">
                     <motion.div
                       initial={{ width: 0 }}
                       whileInView={{ width: "100%" }}
                       viewport={{ once: true }}
                       transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.35 }}
-                      className="bg-lichen/40 h-full rounded-full"
+                      className="bg-lichen/35 h-full rounded-full"
                     />
                   </div>
                 </div>
 
                 <p className="text-[10px] text-lichen/60 italic text-right mt-1">
-                  *Estimated figures based on agricultural biomass life-cycle assessments (LCA).
+                  *Indicative estimate. Subject to material composition and independent verification. Based on agricultural biomass life-cycle assessments (LCA).
                 </p>
               </div>
             </motion.div>
@@ -192,7 +189,7 @@ export default function Sustainability() {
               alt="Clean ocean coral reef protected from plastic pollution"
               fill
               className="object-cover transition-transform duration-700 group-hover:scale-105"
-              sizes="100vw"
+              sizes="(max-width: 1280px) 100vw, 1200px"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-deep/80 via-deep/50 to-transparent" />
             <div className="absolute inset-0 flex items-center px-8 lg:px-14">
@@ -201,8 +198,7 @@ export default function Sustainability() {
                   Protecting Our Oceans
                 </h3>
                 <p className="text-petal/70 text-[14px] leading-relaxed">
-                  Every AQYNTRA bottle that decomposes naturally is one less piece
-                  of permanent plastic threatening marine ecosystems and coral reefs.
+                  AQYNTRA aims to support cleaner oceans through innovative packaging materials.
                 </p>
               </FadeLeft>
             </div>
