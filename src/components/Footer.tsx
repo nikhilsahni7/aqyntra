@@ -72,10 +72,10 @@ export default function Footer() {
             Quick Links
           </h4>
           <ul className="flex flex-col gap-2 text-[13px] text-petal/50">
-            {["Home", "About", "Products", "Sustainability", "Export"].map((name) => (
+            {["Home", "About", "Products", "Sustainability", "Export", "Privacy Policy"].map((name) => (
               <li key={name}>
                 <a
-                  href={`#${name.toLowerCase()}`}
+                  href={name === "Privacy Policy" ? "/privacy" : `/#${name.toLowerCase()}`}
                   className="hover:text-petal transition-colors duration-200 hover:translate-x-0.5 inline-block"
                 >
                   {name}
@@ -97,37 +97,26 @@ export default function Footer() {
             Downloads
           </h4>
           <ul className="flex flex-col gap-2.5 text-[13px] text-petal/50">
-            {/* PDF links hidden until documents are available
             <li>
               <a
-                href="/docs/AQYNTRA_Product_Catalogue.pdf"
-                download
-                onClick={(e) => {
-                  e.preventDefault();
-                  alert("Downloading AQYNTRA Product Catalogue...");
-                }}
+                href="/aqyntra_brochure.pdf"
+                download="AQYNTRA_Product_Brochure.pdf"
                 className="flex items-center gap-2 hover:text-petal transition-colors group"
               >
                 <Download className="w-3.5 h-3.5 text-spring/60 group-hover:text-spring transition-colors group-hover:-translate-y-0.5 transition-transform duration-200" />
-                Product Catalogue
+                Product Brochure
               </a>
             </li>
             <li>
               <a
-                href="/docs/AQYNTRA_Company_Profile.pdf"
-                download
-                onClick={(e) => {
-                  e.preventDefault();
-                  alert("Downloading AQYNTRA Company Profile...");
-                }}
+                href="/aqyntra_company_profile.pdf"
+                download="AQYNTRA_Company_Profile.pdf"
                 className="flex items-center gap-2 hover:text-petal transition-colors group"
               >
                 <Download className="w-3.5 h-3.5 text-spring/60 group-hover:text-spring transition-colors group-hover:-translate-y-0.5 transition-transform duration-200" />
                 Company Profile
               </a>
             </li>
-            */}
-            <li className="text-petal/30 text-[12px] italic">Documents coming soon.</li>
           </ul>
         </motion.div>
 
@@ -164,7 +153,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 mt-12 pt-6 border-t border-petal/[0.06] flex flex-col md:flex-row items-center justify-between gap-4 text-[11px] text-petal/30">
           <p>© 2026 AQYNTRA. All rights reserved.</p>
           <div className="flex items-center gap-6">
-            <a href="#" className="hover:text-petal/60 transition-colors">
+            <a href="/privacy" className="hover:text-petal/60 transition-colors">
               Privacy Policy
             </a>
             <a href="#" className="hover:text-petal/60 transition-colors">

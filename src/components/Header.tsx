@@ -34,12 +34,13 @@ export default function Header() {
   }, []);
 
   const navItems = [
-    { name: "Home", href: "#home", id: "home" },
-    { name: "About", href: "#about", id: "about" },
-    { name: "Products", href: "#products", id: "products" },
-    { name: "Sustainability", href: "#sustainability", id: "sustainability" },
-    { name: "Export", href: "#export", id: "export" },
-    { name: "Contact", href: "#contact", id: "contact" },
+    { name: "Home", href: "/#home", id: "home" },
+    { name: "About", href: "/#about", id: "about" },
+    { name: "Products", href: "/#products", id: "products" },
+    { name: "Sustainability", href: "/#sustainability", id: "sustainability" },
+    { name: "Export", href: "/#export", id: "export" },
+    { name: "Contact", href: "/#contact", id: "contact" },
+    { name: "Privacy", href: "/privacy", id: "privacy" },
   ];
 
   return (
@@ -110,7 +111,7 @@ export default function Header() {
             }`}
           >
             {/* ── Brand ── */}
-            <a href="#home" className="flex items-center gap-3 group logo-animate flex-shrink-0" aria-label="AQYNTRA Home">
+            <a href="/" className="flex items-center gap-3 group logo-animate flex-shrink-0" aria-label="AQYNTRA Home">
               {/* Logo icon — white-backed container so the green mark is crisp on any bg */}
               <div
                 className={`relative flex-shrink-0 transition-all duration-300 ${
@@ -169,7 +170,7 @@ export default function Header() {
             {/* ── CTA ── */}
             <div className="hidden lg:flex items-center">
               <a
-                href="#contact"
+                href="/#contact"
                 className={`cta-glow flex items-center gap-2 font-semibold text-[13.5px] px-5 py-2.5 rounded-full transition-all duration-300 group ${
                   scrolled
                     ? "bg-gradient-to-r from-[#14432A] to-[#0A1F14] text-white hover:from-[#1a5436] hover:to-[#14432A] shadow-lg shadow-[#0A1F14]/20"
@@ -243,7 +244,7 @@ export default function Header() {
         {/* CTA */}
         <div className="px-6 py-6 border-t border-gray-100">
           <a
-            href="#contact"
+            href="/#contact"
             onClick={() => setIsOpen(false)}
             className="flex items-center justify-center gap-2 bg-gradient-to-r from-[#14432A] to-[#0A1F14] text-white font-semibold py-4 rounded-2xl w-full transition-all hover:opacity-90 shadow-lg text-[15px]"
           >

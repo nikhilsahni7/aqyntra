@@ -421,7 +421,7 @@ export default function Hero() {
           </motion.div>
         </div>
         {/* Stat footnote */}
-        <p className="text-white/20 text-[9px] mt-2 text-right italic">
+        <p className="text-white/45 text-[10.5px] mt-2.5 text-right italic font-medium tracking-wide">
           *Indicative estimate. Subject to material composition and independent verification.
         </p>
       </div>

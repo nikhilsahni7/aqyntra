@@ -105,7 +105,7 @@ export default function Contact() {
                   content: (
                     <div className="text-[13px] text-lichen leading-relaxed">
                       AQYNTRA Global Sales Team<br />
-                      B-88, DLF Prime Tower, Pocket F,<br />
+                      808-B, DLF Prime Tower, Pocket F,<br />
                       Okhla Industrial Area Phase I,<br />
                       New Delhi - 110020, India
                     </div>

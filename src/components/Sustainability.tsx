@@ -173,7 +173,7 @@ export default function Sustainability() {
                   </div>
                 </div>
 
-                <p className="text-[10px] text-lichen/60 italic text-right mt-1">
+                <p className="text-[11px] text-lichen/85 italic text-right mt-1.5 font-medium tracking-wide">
                   *Indicative estimate. Subject to material composition and independent verification. Based on agricultural biomass life-cycle assessments (LCA).
                 </p>
               </div>
