@@ -117,6 +117,16 @@ export default function Footer() {
                 Company Profile
               </a>
             </li>
+            <li>
+              <a
+                href="/aqyntra_technical_data_sheets.pdf"
+                download="AQYNTRA_Technical_Data_Sheets.pdf"
+                className="flex items-center gap-2 hover:text-petal transition-colors group"
+              >
+                <Download className="w-3.5 h-3.5 text-spring/60 group-hover:text-spring transition-colors group-hover:-translate-y-0.5 transition-transform duration-200" />
+                Technical Data Sheets
+              </a>
+            </li>
           </ul>
         </motion.div>
 
